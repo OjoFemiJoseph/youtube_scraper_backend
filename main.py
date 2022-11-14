@@ -82,9 +82,6 @@ def get_like_dislike(tag,chrome):
 
 url = os.environ.get("q")
 
-params = pika.URLParameters(url)
-connection = pika.BlockingConnection(params)
-channel = connection.channel() # start a channel
 
 
 def export_csv(df):
@@ -145,6 +142,10 @@ def callback(ch, method, properties, body):
 
 while True:
     try:
+
+        params = pika.URLParameters(url)
+        connection = pika.BlockingConnection(params)
+        channel = connection.channel() # start a channel
         channel.basic_consume(
         queue='youtube', on_message_callback=callback, auto_ack=True)
 
