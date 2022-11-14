@@ -18,6 +18,7 @@ from email.mime.text import MIMEText
 from selenium.webdriver.chrome.service import Service
 
 def click_5_times(elm):
+    print('scrolling')
     elm.send_keys(Keys.DOWN)
     elm.send_keys(Keys.DOWN)
     elm.send_keys(Keys.DOWN)
@@ -25,7 +26,7 @@ def click_5_times(elm):
     elm.send_keys(Keys.DOWN)
     
 def mailer(filename,email,part):
-    
+    print('mailing')
     subject = "An email with attachment from Youtube Scraper"
     body = "This is an email with attachment sent from Python"
     sender_email = os.environ.get("email")
@@ -109,6 +110,7 @@ def callback(ch, method, properties, body):
     driver_service=Service(os.environ.get("CHROMEDRIVER_PATH"))
     chrome = webdriver.Chrome(service=driver_service, options=chrome_options)
     chrome.get(link)
+    print('page loaded')
     for i in range(1000):
         elm = chrome.find_element(By.TAG_NAME,'html')
     #     elm = driver.find_element_by_tag_name("html")
@@ -116,6 +118,7 @@ def callback(ch, method, properties, body):
         click_5_times(elm)
 
     #     html.send_keys(Keys.END)
+    print('scrolled finish')
     soup = bs(chrome.page_source,'lxml')
     each_tag = soup.find_all('ytd-rich-grid-media')
     dta = []
