@@ -15,6 +15,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from selenium.webdriver.chrome.service import Service
 
 def click_5_times(elm):
     elm.send_keys(Keys.DOWN)
@@ -105,7 +106,8 @@ def callback(ch, method, properties, body):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    chrome = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+    driver_service=Service(os.environ.get("CHROMEDRIVER_PATH"))
+    chrome = webdriver.Chrome(service=driver_service, options=chrome_options)
     chrome.get(link)
     for i in range(1000):
         elm = chrome.find_element(By.TAG_NAME,'html')
