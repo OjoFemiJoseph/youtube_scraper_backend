@@ -64,6 +64,7 @@ def mailer(filename,email,part):
 
 def get_like_dislike(tag,chrome):
     link = 'https://www.youtube.com' +tag.a['href']
+    print('link')
     chrome.get(link)
     time.sleep(4)
     try:
@@ -111,7 +112,7 @@ def callback(ch, method, properties, body):
     chrome = webdriver.Chrome(service=driver_service, options=chrome_options)
     chrome.get(link)
     print('page loaded')
-    for i in range(1000):
+    for i in range(100):
         elm = chrome.find_element(By.TAG_NAME,'html')
     #     elm = driver.find_element_by_tag_name("html")
     #     elm.send_keys(Keys.DOWN)
@@ -122,7 +123,9 @@ def callback(ch, method, properties, body):
     soup = bs(chrome.page_source,'lxml')
     each_tag = soup.find_all('ytd-rich-grid-media')
     dta = []
+    print('looping')
     for tag in each_tag:
+        
         i = tag.text.replace('\n','').strip()
         temp = i.split('Now playing')
         duration = temp[0]
