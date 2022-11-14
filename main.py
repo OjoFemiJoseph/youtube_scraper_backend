@@ -149,5 +149,5 @@ while True:
         queue='youtube', on_message_callback=callback, auto_ack=True)
 
         channel.start_consuming()
-    except:
-        pass
+    except Exception as error:
+        print(error)
