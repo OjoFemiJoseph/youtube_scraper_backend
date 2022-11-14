@@ -1,0 +1,7 @@
+selenium
+pandas
+bs4
+smtplib
+ssl
+pika
+email
