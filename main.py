@@ -134,12 +134,12 @@ def callback(ch, method, properties, body):
 
 
 
-if __name__ == '__main__':
-    while True:
-        try:
-            channel.basic_consume(
-            queue='youtube', on_message_callback=callback, auto_ack=True)
 
-            channel.start_consuming()
-        except:
-            pass
+while True:
+    try:
+        channel.basic_consume(
+        queue='youtube', on_message_callback=callback, auto_ack=True)
+
+        channel.start_consuming()
+    except:
+        pass
