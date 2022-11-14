@@ -2,4 +2,3 @@ selenium
 pandas
 bs4
 pika
-email
