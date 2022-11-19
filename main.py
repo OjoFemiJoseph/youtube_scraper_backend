@@ -109,7 +109,7 @@ def callback(ch, method, properties, body):
     chrome = webdriver.Chrome(service=driver_service, options=chrome_options)
     chrome.get(link)
     print('page loaded')
-    for i in range(100):
+    for i in range(200):
         elm = chrome.find_element(By.TAG_NAME,'html')
     #     elm = driver.find_element_by_tag_name("html")
     #     elm.send_keys(Keys.DOWN)
@@ -121,6 +121,9 @@ def callback(ch, method, properties, body):
     each_tag = soup.find_all('ytd-rich-grid-media')
     dta = []
     print('looping')
+    video_type = 'Uploaded'
+    if chrome.current_url.endswith('/streams'):
+        video_type = 'Streamed'
     for tag in each_tag:
         
         i = tag.text.replace('\n','').strip()
@@ -129,10 +132,11 @@ def callback(ch, method, properties, body):
         temp2 = temp[1].split('•')
         title = temp2[0]
         views,day = temp2[1].split('views')
+        day = day.replace('streamed','').strip()
         like,dislike = get_like_dislike(tag,chrome)
-        dta.append([duration,title,views,day,like,dislike])
+        dta.append([duration,title,views,day,like,dislike,video_type])
     filename = link.split('/')[-2]
-    df = pd.DataFrame(data=dta,columns=['duration','title','views','day','like','dislike'])
+    df = pd.DataFrame(data=dta,columns=['duration','title','views','day','like','dislike','video_type'])
     filename = f'{filename}.csv'
     part = export_csv(df)
     mailer(filename,email,part)
