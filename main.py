@@ -136,10 +136,12 @@ def callback(ch, method, properties, body):
         like,dislike = get_like_dislike(tag,chrome)
         dta.append([duration,title,views,day,like,dislike,video_type])
     filename = link.split('/')[-2]
+    print(len(dta))
     df = pd.DataFrame(data=dta,columns=['duration','title','views','day','like','dislike','video_type'])
     filename = f'{filename}.csv'
-    part = export_csv(df)
-    mailer(filename,email,part)
+    print(df.shape)
+#     part = export_csv(df)
+#     mailer(filename,email,part)
 
 
 
