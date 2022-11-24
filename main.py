@@ -72,12 +72,20 @@ def get_like_dislike(tag,chrome):
     except:
         time.sleep(5)
         soup2 = bs(chrome.page_source,'lxml')
-    like = soup2.find('div',{'id':'segmented-like-button'}).text.split('\n')[0]
-    if not like:
-        like = 0
-    dislike = soup2.find('div',{'id':'segmented-dislike-button'}).text.split('\n')[0]
-    if not dislike:
-        dislike= 0
+    try:
+        like = soup2.find('div',{'id':'segmented-like-button'}).text.split('\n')[0]
+        if not like:
+            like = 0
+    except:
+        print('encountered an error while getting the likes')
+        like = 'error'
+    try:
+        dislike = soup2.find('div',{'id':'segmented-dislike-button'}).text.split('\n')[0]
+        if not dislike:
+            dislike= 0
+    except:
+        print('encountered an error while getting the dislikes')
+        dislike = 'error'
     return like,dislike
 
 url = os.environ.get("q")
@@ -140,8 +148,8 @@ def callback(ch, method, properties, body):
     df = pd.DataFrame(data=dta,columns=['duration','title','views','day','like','dislike','video_type'])
     filename = f'{filename}.csv'
     print(df.shape)
-#     part = export_csv(df)
-#     mailer(filename,email,part)
+    part = export_csv(df)
+    mailer(filename,email,part)
 
 
 
