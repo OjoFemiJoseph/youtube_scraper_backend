@@ -167,7 +167,7 @@ while True:
         connection = pika.BlockingConnection(params)
         channel = connection.channel() # start a channel
         channel.basic_consume(
-        queue='newYoutube', on_message_callback=callback, autoack=True)
+        queue='newYoutube', on_message_callback=callback, auto_ack=True)
 
         channel.start_consuming()
     except Exception as error:
