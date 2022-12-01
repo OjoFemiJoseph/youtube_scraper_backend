@@ -114,13 +114,13 @@ def callback(ch, method, properties, body):
     data.append(str(body))
     link ,email = data[0].split('[')[1].split(']')[0].split(',')
     
-    # chrome_options = webdriver.ChromeOptions()
-    # # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    # chrome_options.add_argument("--headless")
-    # chrome_options.add_argument("--disable-dev-shm-usage")
-    # chrome_options.add_argument("--no-sandbox")
+    chrome_options = Options()
+    #chrome_options.add_argument("--disable-extensions")
+    #chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox") # linux only
+    chrome_options.add_argument("--headless")
     
-    chrome = webdriver.Chrome()#options=chrome_options)
+    chrome = webdriver.Chrome(options=chrome_options)
     chrome.get(link)
     print('page loaded')
     for i in range(500):
