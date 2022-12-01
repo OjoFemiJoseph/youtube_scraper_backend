@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import os
 import time
 import pandas as pd
 from bs4 import BeautifulSoup as bs
@@ -16,6 +15,10 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from selenium.webdriver.chrome.service import Service
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def click_5_times(elm):
     print('scrolling')
@@ -29,9 +32,9 @@ def mailer(filename,email,part):
     print('mailing')
     subject = "An email with attachment from Youtube Scraper"
     body = "This is an email with attachment sent from Python"
-    sender_email = os.environ.get("email")
+    sender_email = os.environ["email"]
     receiver_email = email 
-    password = os.environ.get("pw")
+    password = os.environ["pw"]
 
     # Create a multipart message and set headers
     message = MIMEMultipart()
@@ -61,12 +64,13 @@ def mailer(filename,email,part):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, text)
+    print('mailed')
 
 def get_like_dislike(tag,chrome):
     link = 'https://www.youtube.com' +tag.a['href']
-    print('link')
+    print(link)
     chrome.get(link)
-    time.sleep(4)
+    time.sleep(5)
     try:
         soup2 = bs(chrome.page_source,'lxml')
     except:
@@ -88,7 +92,7 @@ def get_like_dislike(tag,chrome):
         dislike = 'error'
     return like,dislike
 
-url = os.environ.get("q")
+url = os.environ["q"]
 
 
 
@@ -108,13 +112,13 @@ def callback(ch, method, properties, body):
     data.append(str(body))
     link ,email = data[0].split('[')[1].split(']')[0].split(',')
     
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    driver_service=Service(os.environ.get("CHROMEDRIVER_PATH"))
-    chrome = webdriver.Chrome(service=driver_service, options=chrome_options)
+    # chrome_options = webdriver.ChromeOptions()
+    # # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--disable-dev-shm-usage")
+    # chrome_options.add_argument("--no-sandbox")
+    
+    chrome = webdriver.Chrome()#options=chrome_options)
     chrome.get(link)
     print('page loaded')
     for i in range(200):
@@ -156,12 +160,12 @@ def callback(ch, method, properties, body):
 
 while True:
     try:
-
+        print('running')
         params = pika.URLParameters(url)
         connection = pika.BlockingConnection(params)
         channel = connection.channel() # start a channel
         channel.basic_consume(
-        queue='youtube', on_message_callback=callback, auto_ack=True)
+        queue='newYoutube', on_message_callback=callback)
 
         channel.start_consuming()
     except Exception as error:
