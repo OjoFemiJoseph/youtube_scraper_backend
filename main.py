@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+import os
 import time
 import pandas as pd
 from bs4 import BeautifulSoup as bs
@@ -22,6 +23,7 @@ load_dotenv()
 
 def click_5_times(elm):
     print('scrolling')
+    elm.send_keys(Keys.DOWN)
     elm.send_keys(Keys.DOWN)
     elm.send_keys(Keys.DOWN)
     elm.send_keys(Keys.DOWN)
@@ -121,7 +123,7 @@ def callback(ch, method, properties, body):
     chrome = webdriver.Chrome()#options=chrome_options)
     chrome.get(link)
     print('page loaded')
-    for i in range(200):
+    for i in range(500):
         elm = chrome.find_element(By.TAG_NAME,'html')
     #     elm = driver.find_element_by_tag_name("html")
     #     elm.send_keys(Keys.DOWN)
@@ -165,7 +167,7 @@ while True:
         connection = pika.BlockingConnection(params)
         channel = connection.channel() # start a channel
         channel.basic_consume(
-        queue='newYoutube', on_message_callback=callback)
+        queue='newYoutube', on_message_callback=callback, autoack=True)
 
         channel.start_consuming()
     except Exception as error:
