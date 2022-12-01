@@ -114,7 +114,7 @@ def callback(ch, method, properties, body):
     data.append(str(body))
     link ,email = data[0].split('[')[1].split(']')[0].split(',')
     
-    chrome_options = Options()
+    chrome_options = webdriver.ChromeOptions()
     #chrome_options.add_argument("--disable-extensions")
     #chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox") # linux only
